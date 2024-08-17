@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock, Paper, Scissors</title>
+  </head>
+  <body>
+    <script>
+      let computer_score = 0;
+      let human_score = 0;
+
+      function ignoreCaseEquals(str1, str2) {
+        return str1.toLowerCase() === str2.toLowerCase();
+      }
+
+      function getComputerChoice() {
+        const num = Math.ceil(Math.random() * 3);
+        if (num === 1) {
+          return "Rock";
+        } else if (num === 2) {
+          return "Paper";
+        } else {
+          return "Scissors";
+        }
+      }
+
+      function whoWon(userChoice, computerChoice) {
+        if (ignoreCaseEquals(userChoice, computerChoice)) {
+          return "It's a Tie!";
+        } else if (
+          ignoreCaseEquals(userChoice, "Rock") &&
+          computerChoice === "Paper"
+        ) {
+          computer_score++;
+          return "Computer Won!";
+        } else if (
+          ignoreCaseEquals(userChoice, "Rock") &&
+          computerChoice === "Scissors"
+        ) {
+          human_score++;
+          return "You Won!";
+        } else if (
+          ignoreCaseEquals(userChoice, "Paper") &&
+          computerChoice === "Rock"
+        ) {
+          human_score++;
+          return "You Won!";
+        } else if (
+          ignoreCaseEquals(userChoice, "Paper") &&
+          computerChoice === "Scissors"
+        ) {
+          computer_score++;
+          return "Computer Won!";
+        } else if (
+          ignoreCaseEquals(userChoice, "Scissors") &&
+          computerChoice === "Paper"
+        ) {
+          human_score++;
+          return "You Won!";
+        } else {
+          computer_score++;
+          return "Computer Won!";
+        }
+      }
+
+      function getHumanChoice() {
+        let choice = prompt("Rock, Paper, or Scissors: ").toLowerCase();
+        while (!["rock", "paper", "scissors"].includes(choice)) {
+          choice = prompt(
+            "Invalid input. Please enter Rock, Paper, or Scissors: "
+          ).toLowerCase();
+        }
+        return choice;
+      }
+
+      function playRound() {
+        const userInput = getHumanChoice();
+        const computerInput = getComputerChoice();
+        console.log("You chose: " + userInput);
+        console.log("Computer chose: " + computerInput);
+        console.log(whoWon(userInput, computerInput));
+        console.log("----------------------------");
+      }
+
+      let rounds = 0;
+      while (rounds < 5) {
+        rounds++;
+        playRound();
+      }
+
+      if (computer_score > human_score) {
+        console.log("The computer won more rounds. It won " + computer_score + " rounds.");
+      } else if (human_score > computer_score) {
+        console.log("You won more rounds. You won " + human_score + " rounds.");
+      } else {
+        console.log("It's a tie overall!");
+      }
+    </script>
+  </body>
+</html>
