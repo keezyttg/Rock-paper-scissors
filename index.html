@@ -1,101 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock, Paper, Scissors</title>
-  </head>
-  <body>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .human_choices button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #results, #score, #winner {
+            margin: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="human_choices">
+            <button id="rock">Rock</button>
+            <button id="paper">Paper</button>
+            <button id="scissors">Scissors</button>
+        </div>
+        <div id="results"></div>
+        <div id="score"></div>
+        <div id="winner"></div>
+    </div>
+
     <script>
-      let computer_score = 0;
-      let human_score = 0;
+        let computerScore = 0;
+        let humanScore = 0;
+        const results = document.getElementById('results');
+        const score = document.getElementById('score');
+        const winner = document.getElementById('winner');
 
-      function ignoreCaseEquals(str1, str2) {
-        return str1.toLowerCase() === str2.toLowerCase();
-      }
-
-      function getComputerChoice() {
-        const num = Math.ceil(Math.random() * 3);
-        if (num === 1) {
-          return "Rock";
-        } else if (num === 2) {
-          return "Paper";
-        } else {
-          return "Scissors";
+        function getComputerChoice() {
+            const choices = ['Rock', 'Paper', 'Scissors'];
+            return choices[Math.floor(Math.random() * choices.length)];
         }
-      }
+        function playRound(playerSelection) {
+            const computerSelection = getComputerChoice();
+            
+            results.textContent = `You chose ${playerSelection}, Computer chose ${computerSelection}`;
+            
+            if (playerSelection === computerSelection) {
+                results.textContent += ". It's a tie!";
+            } else if (
+                (playerSelection === 'Rock' && computerSelection === 'Scissors') ||
+                (playerSelection === 'Paper' && computerSelection === 'Rock') ||
+                (playerSelection === 'Scissors' && computerSelection === 'Paper')
+            ) {
+                humanScore++;
+                results.textContent += ". You win!";
+            } else {
+                computerScore++;
+                results.textContent += ". Computer wins!";
+            }
 
-      function whoWon(userChoice, computerChoice) {
-        if (ignoreCaseEquals(userChoice, computerChoice)) {
-          return "It's a Tie!";
-        } else if (
-          ignoreCaseEquals(userChoice, "Rock") &&
-          computerChoice === "Paper"
-        ) {
-          computer_score++;
-          return "Computer Won!";
-        } else if (
-          ignoreCaseEquals(userChoice, "Rock") &&
-          computerChoice === "Scissors"
-        ) {
-          human_score++;
-          return "You Won!";
-        } else if (
-          ignoreCaseEquals(userChoice, "Paper") &&
-          computerChoice === "Rock"
-        ) {
-          human_score++;
-          return "You Won!";
-        } else if (
-          ignoreCaseEquals(userChoice, "Paper") &&
-          computerChoice === "Scissors"
-        ) {
-          computer_score++;
-          return "Computer Won!";
-        } else if (
-          ignoreCaseEquals(userChoice, "Scissors") &&
-          computerChoice === "Paper"
-        ) {
-          human_score++;
-          return "You Won!";
-        } else {
-          computer_score++;
-          return "Computer Won!";
+            score.textContent = `Score - You: ${humanScore}, Computer: ${computerScore}`;
+
+            if (humanScore === 5 || computerScore === 5) {
+                const gameWinner = humanScore === 5 ? "You" : "Computer";
+                winner.textContent = `Game Over! ${gameWinner} won the game!`;
+                disableButtons();
+            }
         }
-      }
 
-      function getHumanChoice() {
-        let choice = prompt("Rock, Paper, or Scissors: ").toLowerCase();
-        while (!["rock", "paper", "scissors"].includes(choice)) {
-          choice = prompt(
-            "Invalid input. Please enter Rock, Paper, or Scissors: "
-          ).toLowerCase();
+        function disableButtons() {
+            document.querySelectorAll('.human_choices button').forEach(button => {
+                button.disabled = true;
+            });
         }
-        return choice;
-      }
 
-      function playRound() {
-        const userInput = getHumanChoice();
-        const computerInput = getComputerChoice();
-        console.log("You chose: " + userInput);
-        console.log("Computer chose: " + computerInput);
-        console.log(whoWon(userInput, computerInput));
-        console.log("----------------------------");
-      }
-
-      let rounds = 0;
-      while (rounds < 5) {
-        rounds++;
-        playRound();
-      }
-
-      if (computer_score > human_score) {
-        console.log("The computer won more rounds. It won " + computer_score + " rounds.");
-      } else if (human_score > computer_score) {
-        console.log("You won more rounds. You won " + human_score + " rounds.");
-      } else {
-        console.log("It's a tie overall!");
-      }
+        // Add event listeners to buttons
+        document.getElementById('rock').addEventListener('click', () => playRound('Rock'));
+        document.getElementById('paper').addEventListener('click', () => playRound('Paper'));
+        document.getElementById('scissors').addEventListener('click', () => playRound('Scissors'));
     </script>
-  </body>
+</body>
 </html>
